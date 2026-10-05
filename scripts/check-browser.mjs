@@ -10,7 +10,7 @@ const origin = process.env.PW_PREVIEW_URL || 'http://127.0.0.1:4173';
 try {
   await mkdir('test-artifacts', { recursive: true });
   await page.goto(origin);
-  await page.getByRole('heading', { name: /风景在路上/ }).waitFor();
+  await page.getByRole('heading', { name: '爱好、想法与日常。' }).waitFor();
   await page.screenshot({ path: 'test-artifacts/home-desktop.png', fullPage: true });
   await page.getByRole('link', { name: '所有记录', exact: true }).click();
   await page.getByRole('button', { name: '语言与文化', exact: true }).click();
@@ -72,7 +72,7 @@ try {
   await page.reload();
   await page.context().setOffline(true);
   await page.reload();
-  await page.getByRole('heading', { name: /风景在路上/ }).waitFor();
+  await page.getByRole('heading', { name: '爱好、想法与日常。' }).waitFor();
   await page.context().setOffline(false);
   assert.deepEqual(errors, []);
   console.log('Browser QA passed: filters, reading size, topic, fictional timeline, draft/preview/publish, escaping, reset, photo preview, 7 mobile routes, public offline shell.');

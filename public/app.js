@@ -12,16 +12,15 @@ function meta(post) { return `<div class="meta"><span>${escape(post.category)}</
 function cover(post) {
   return post.image ? `<img src="./assets/${post.image}.svg" alt="${post.image === 'map' ? '虚构线路示意地图，非真实地理数据' : '水边山景原创插画，非创建者实拍'}" loading="lazy">` : `<div class="text-cover ${post.category === '音乐' ? 'music' : ''}" aria-hidden="true"><span>${post.category === '音乐' ? '♪' : '札记'}</span><small>示例文字</small></div>`;
 }
-function card(post) { return `<a class="card" href="#/post/${encodeURIComponent(post.id)}">${cover(post)}<div>${meta(post)}<h3>${escape(post.title)}</h3><p>${escape(post.excerpt)}</p></div></a>`; }
+function card(post) { return `<a class="card" href="#/post/${encodeURIComponent(post.id)}">${meta(post)}<h3>${escape(post.title)}</h3><p>${escape(post.excerpt)}</p></a>`; }
 function intro(title, subtitle, eyebrow = 'THE JOURNAL / 示例原型') { return `<div class="page-intro"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><p>${subtitle}</p></div>`; }
 function notice(text) { return `<div class="notice">${text}</div>`; }
 function chips(items, current, action) { return items.map(item => `<button class="chip ${current === item ? 'active' : ''}" aria-pressed="${current === item}" data-action="${action}" data-value="${escape(item)}">${escape(item)}</button>`).join(''); }
 function home() {
-  main.innerHTML = `<section class="hero"><div><div class="eyebrow">A PERSONAL JOURNAL / 个人记录</div><h1>风景在路上，<br>想法在字里。</h1><p class="intro">关于交通、远行、语言和音乐。<br>也关于普通日子里，值得记下来的一点一滴。</p><div class="hero-links"><a class="text-link" href="#/archive">翻阅所有记录 ↗</a><a href="#/about">关于这个空间 →</a></div></div><figure><span class="image-index">VIEW No. 01 / 示例</span><img src="./assets/landscape.svg" alt="山与水边道路的原创风景插画，非实拍"><figcaption><span>沿着水边，走到日光变慢</span><span>原创示例插画 · 非旅行实拍</span></figcaption></figure></section>
-    <nav class="category-strip" aria-label="公开栏目">${categories.map((cat, i) => `<a href="${categoryUrl(cat)}"><span class="eyebrow">0${i + 1}</span> &nbsp; ${cat}</a>`).join('')}<a href="#/about">07 &nbsp; 关于我</a></nav>
-    <div class="section-head"><h2>最近写下的 <small>RECENT ENTRIES</small></h2><a href="#/archive">全部记录 ↗</a></div>
-    <section class="content-grid" aria-label="最近的示例文章"><div class="cards">${posts.slice(0, 2).map(card).join('')}</div><aside class="rail-note"><div class="eyebrow">ON THE MAP / 地图一角</div><div class="tiny-lines" aria-hidden="true"><i></i><span></span><i></i><span></span><i></i><span></span><i></i></div><h3>从一条线，<br>想象一座城市。</h3><p>铁路网络、线路构想与规划过程。<br>在 NIMBY Rails 中，把想法慢慢连接起来。</p><a class="text-link" href="${categoryUrl('NIMBY Rails')}">查看规划示例 ↗</a></aside></section>
-    <section class="lower-grid"><div class="notes"><div class="section-head"><h2>小小的记录 <small>FIELD NOTES</small></h2><a href="#/archive?type=短记">更多短记 ↗</a></div>${[posts[6], posts[7]].map(post => `<a href="#/post/${post.id}" class="note" style="display:block">${meta(post)}<h3>${escape(post.title)}</h3><p>${escape(post.excerpt)}</p></a>`).join('')}</div><aside class="music-panel"><div class="eyebrow">MUSIC & WORDS / 专题</div><h2>夜鹿 · ヨルシカ</h2><p>听过的歌，延伸出的故事，<br>以及想沿着音乐去看的风景。</p><p>听后感 / 衍生小说 / 圣地巡礼</p><a href="#/music">进入夜鹿专题 ↗</a></aside></section>`;
+  const recent = [posts[0], posts[1], posts[3], posts[7]];
+  main.innerHTML = `<section class="home-intro"><span class="eyebrow">个人网站 · 名称待定</span><h1>爱好、想法与日常。</h1><p>记录交通与地图、旅行、语言和音乐，也留下一些生活中的思考。</p><span class="sample-note">当前文章、日期与图像均为示例。</span></section>
+    <nav class="category-strip" aria-label="公开栏目">${categories.map(cat => `<a href="${categoryUrl(cat)}">${cat}</a>`).join('')}<a href="#/about">关于我</a></nav>
+    <section aria-label="最近的示例文章"><div class="section-head"><h2>最近记录</h2><a href="#/archive">全部记录 →</a></div><div class="entry-list">${recent.map(card).join('')}</div></section>`;
 }
 function archive(fixedCategory) {
   const selected = fixedCategory || archiveCategory;
@@ -40,7 +39,7 @@ function article(id) {
 }
 function music() {
   const filtered = posts.filter(post => post.category === '音乐' && (topic === '全部' || post.topic === topic));
-  main.innerHTML = `<section class="topic-header"><div><div class="eyebrow">MUSIC & WORDS / 专题示例</div><h1>夜鹿<span style="font-size:.4em"> · ヨルシカ</span></h1><p>让听后的余韵成为文字。<br>给歌曲听后感、衍生故事和巡礼线索，各留一个位置。</p><span class="example">所有文字均为示例</span></div><div class="topic-art" aria-hidden="true"><div class="record"><span>音 与 字</span></div><small>原创图形 · 非专辑封面</small></div></section><div class="section-head"><h2>专题记录</h2><span class="eyebrow">WORDS AFTER MUSIC</span></div><div class="filters" aria-label="筛选夜鹿专题">${chips(['全部', '听后感', '衍生小说', '圣地巡礼'], topic, 'topic')}</div><div class="archive-grid">${filtered.map(card).join('')}</div>`;
+  main.innerHTML = `${intro('夜鹿 · ヨルシカ', '歌曲听后感、衍生小说与圣地巡礼。以下文字均为示例。', '音乐 / 夜鹿专题')}<div class="filters" aria-label="筛选夜鹿专题">${chips(['全部', '听后感', '衍生小说', '圣地巡礼'], topic, 'topic')}</div><div class="archive-grid">${filtered.map(card).join('')}</div>`;
 }
 function about() {
   main.innerHTML = `<div class="about">${intro('关于这个空间', '一个用于展示和记录爱好、思维与日常生活的个人空间。', 'ABOUT / 个人介绍待填写')}<h2>先为生活留一个位置。</h2><p>这里计划围绕交通与地图、NIMBY Rails、旅行与散步、语言与文化、音乐和日常随笔展开。长文章与短记并存，让不同长度的想法都能被留下。</p><dl><dt>网站名称</dt><dd>待确定；PW 是当前项目代号。</dd><dt>创建者介绍</dt><dd>待创建者填写，不推断姓名、职业、所在地或经历。</dd><dt>头像与联系</dt><dd>待创建者决定公开范围。</dd><dt>这个阶段</dt><dd>使用明确示例内容验证阅读、栏目和管理流程。</dd></dl>${notice('记忆阁楼计划仅供创建者使用。当前只提供公开的虚构界面演示，尚未接入登录、私密存储与后台。')}<a class="text-link" href="#/archive">回到记录 ↗</a></div>`;

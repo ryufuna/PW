@@ -29,3 +29,14 @@ test('content fixtures cover requested formats and music topic subdivisions', ()
   assert.equal(new Set(posts.map(post => post.id)).size, posts.length);
   assert.ok(memories.every(item => item.text.includes('虚构')));
 });
+
+test('GitHub Pages project prefix serves assets and excludes repository paths', async () => {
+  const server = createServer({ basePath: '/PW/' });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const origin = `http://127.0.0.1:${server.address().port}`;
+  try {
+    for (const resource of ['/PW/', '/PW/app.js', '/PW/content.js', '/PW/assets/icon.svg', '/PW/sw.js']) assert.equal((await fetch(origin + resource)).status, 200, resource);
+    for (const resource of ['/', '/app.js', '/PW/README.md', '/PW/..%5cREADME.md']) assert.equal((await fetch(origin + resource)).status, 404, resource);
+    assert.equal((await fetch(origin + '/PW', { redirect: 'manual' })).status, 301);
+  } finally { await new Promise(resolve => server.close(resolve)); }
+});

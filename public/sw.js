@@ -1,4 +1,4 @@
-const CACHE = 'pw-public-prototype-v1';
+const CACHE = 'pw-public-prototype-v2';
 const FILES = ['./', './index.html', './styles.css', './app.js', './content.js', './assets/icon.svg', './assets/map.svg', './assets/landscape.svg', './manifest.webmanifest'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES))));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('pw-public-prototype-') && key !== CACHE).map(key => caches.delete(key))))));

@@ -133,4 +133,24 @@ PWA 基础文件已经加入；在支持的浏览器中可尝试安装，需 loc
 - `scripts/serve.mjs`：本机静态预览服务，仅允许公开目录中的指定文件类型
 - `tests/`：预览资源、仓库文件不可访问、只读服务与内容结构检查
 
-运行 `npm test`。可选浏览器检查见 `scripts/check-browser.mjs`，需要已有的 Playwright 和本机 Edge；验证详情见 `docs/phase-1-verification.md`。代码可以同步至 GitHub，真实内容与环境变量不得加入仓库。此阶段不自动配置公开生产部署。
+运行 `npm test`。可选浏览器检查见 `scripts/check-browser.mjs`，需要已有的 Playwright 和本机 Edge；验证详情见 `docs/phase-1-verification.md`。代码可以同步至 GitHub，真实内容与环境变量不得加入仓库。
+
+## 精简界面与 GitHub Pages
+
+首页已精简为介绍、栏目入口和记录列表。图片与地图放在文章详情中；夜鹿专题使用单栏列表。布局参考 CastorRise 网站的克制呈现，未复制其内容或照片。
+
+已配置 `.github/workflows/pages.yml`，推送 main 后自动检查并仅部署 `public/`。部署地址预计为 `https://ryufuna.github.io/PW/`，**当前尚未上线**。
+
+2026-10-05 实际启用 Pages 请求返回 422：当前账号方案不支持此私有仓库的 GitHub Pages。仓库可见性保持私有。上线前需创建者明确授权公开仓库，或自行选择支持私有仓库 Pages 的方案，然后在仓库 Settings → Pages → Build and deployment → Source 选择 GitHub Actions，在 Actions 手动运行 Publish personal site to GitHub Pages。
+
+GitHub Pages 托管公开网页，不能运行真实私密权限或数据库。未来管理与私密空间需要独立安全后台；当前的管理/时间线仍为虚构演示。
+
+本机模拟 GitHub Pages 的 `/PW/` 路径：
+
+```powershell
+$env:PW_BASE_PATH = '/PW/'
+$env:PORT = '4174'
+npm run dev
+```
+
+访问 `http://127.0.0.1:4174/PW/`。恢复普通预览可执行 `Remove-Item Env:PW_BASE_PATH`。
